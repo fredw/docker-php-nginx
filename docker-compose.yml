@@ -1,0 +1,26 @@
+php:
+    build: php/
+    links:
+        - mysql:mysql
+    volumes:
+        - ./www:/var/www
+
+nginx:
+    image: nginx
+    links:
+        - php:php
+    ports:
+        - 80:80
+        - 443:443
+    volumes_from:
+        - php
+    volumes:
+        - ./nginx/vhosts:/etc/nginx/conf.d
+        - ./nginx/config/nginx.conf:/etc/nginx/nginx.conf:ro
+
+mysql:
+    image: mysql
+    ports:
+        - 3306:3306
+    environment:
+        MYSQL_ROOT_PASSWORD: root
